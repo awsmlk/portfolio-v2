@@ -84,45 +84,6 @@ const NAV_ITEMS: Array<{ id: SectionId; label: string }> = [
   { id: 'portfolio', label: 'Portfolio' }, { id: 'blog', label: 'Blog' }, { id: 'contact', label: "Let's talk" },
 ]
 
-function downloadResume() {
-  const stream = [
-    'BT', '/F1 23 Tf', '72 738 Td', '(Awais Malik) Tj', '0 -30 Td', '/F1 12 Tf',
-    '(Software Developer | AI and Robotics Enthusiast) Tj', '0 -22 Td',
-    '(Islamabad, Pakistan | awsmlk@proton.me | github.com/awsmlk) Tj', '0 -40 Td',
-    '/F1 15 Tf', '(Profile) Tj', '0 -22 Td', '/F1 11 Tf',
-    '(Computer science student building web apps, bots, machine learning projects, and intelligent robotic systems.) Tj',
-    '0 -42 Td', '/F1 15 Tf', '(Education) Tj', '0 -22 Td', '/F1 11 Tf',
-    '(Bahria University - BS Information Technology, 2025-2029) Tj', '0 -17 Td',
-    '(Army Public School - High School Science, 2020-2024) Tj',
-    '0 -42 Td', '/F1 15 Tf', '(Skills) Tj', '0 -22 Td', '/F1 11 Tf',
-    '(JavaScript, Python, C++, Node.js, Express.js, Discord.js, MongoDB, MySQL, Git, Arduino, Linux) Tj',
-    'ET',
-  ].join('\n')
-  const objects = [
-    '<< /Type /Catalog /Pages 2 0 R >>',
-    '<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
-    '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R >>',
-    `<< /Length ${stream.length} >>\nstream\n${stream}\nendstream`,
-    '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>',
-  ]
-  let pdf = '%PDF-1.4\n'
-  const offsets = [0]
-  objects.forEach((object, index) => {
-    offsets.push(pdf.length)
-    pdf += `${index + 1} 0 obj\n${object}\nendobj\n`
-  })
-  const xrefOffset = pdf.length
-  pdf += `xref\n0 ${objects.length + 1}\n0000000000 65535 f \n`
-  offsets.slice(1).forEach(offset => { pdf += `${String(offset).padStart(10, '0')} 00000 n \n` })
-  pdf += `trailer\n<< /Size ${objects.length + 1} /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`
-  const url = URL.createObjectURL(new Blob([pdf], { type: 'application/pdf' }))
-  const link = document.createElement('a')
-  link.href = url
-  link.download = 'awais-malik-resume.pdf'
-  link.click()
-  URL.revokeObjectURL(url)
-}
-
 function SocialLinks({ compact = false }: { compact?: boolean }) {
   return <div className={compact ? 'social-links social-links--compact' : 'social-links'}>
     {SOCIALS.map(({ label, href, icon: SocialIcon }) => (
@@ -156,11 +117,11 @@ function HomeSection({ onNavigate }: { onNavigate: (id: SectionId) => void }) {
     </div>
     <div className="hero-grid">
       <div className="hero-copy">
-        <p className="eyebrow hero-eyebrow">Software Developer · AI & Robotics</p>
+        <p className="eyebrow hero-eyebrow">AI &amp; Robotics Enthusiast</p>
         <h1 id="hero-title"><span>Awais</span><span className="muted-word">Malik</span></h1>
         <div className="hero-actions">
           <button className="button button--primary" onClick={() => onNavigate('portfolio')}>See my work <ArrowRight /></button>
-          <button className="button button--ghost" onClick={downloadResume}><Download /> Resume</button>
+          <a className="button button--ghost" href={`${import.meta.env.BASE_URL}resume.pdf`} download="awais-malik-resume.pdf"><Download /> Resume</a>
         </div>
       </div>
     </div>
@@ -172,14 +133,14 @@ function AboutSection() {
     <div className="simple-content">
         <p className="page-kicker">01 / About</p>
         <p className="about-intro">Hey, I'm Awais! I love coding and building things.</p>
-        <h1 id="about-title" className="about-title">Software Developer, <span>AI &amp; Robotics</span> enthusiast.</h1>
+        <h1 id="about-title" className="about-title">AI &amp; Robotics enthusiast, <span>building useful software.</span></h1>
         <div className="about-copy">
           <p>I'm a computer science student with a passion for <mark className="mark-blue">software engineering</mark>, <mark className="mark-purple">artificial intelligence</mark>, and <mark className="mark-green">robotics</mark>.</p>
           <p>I enjoy building web applications, Discord bots, machine learning projects, and intelligent robotic systems. I love turning ideas into real-world solutions and continuously learning new technologies.</p>
         </div>
         <div className="terminal-card" aria-label="Awais Malik terminal profile">
           <div className="terminal-bar"><span /><span /><span /><em>awais@portfolio</em></div>
-          <div className="terminal-body"><p><b>awais@portfolio</b><i>:~$</i> whoami</p><p className="terminal-muted">Awais Malik — Software Developer &amp; Robotics Enthusiast</p><p><b>awais@portfolio</b><i>:~$</i> cat skills.txt</p><p className="terminal-muted">JavaScript, Python, C++, Node.js, Arduino, ML, Discord.js...</p><p><b>awais@portfolio</b><i>:~$</i> echo $CURRENT_FOCUS</p><p className="terminal-muted">Building smarter software, one commit at a time.</p><p><b>awais@portfolio</b><i>:~$</i> <span className="cursor">█</span></p></div>
+          <div className="terminal-body"><p><b>awais@portfolio</b><i>:~$</i> whoami</p><p className="terminal-muted">Awais Malik — AI &amp; Robotics Enthusiast</p><p><b>awais@portfolio</b><i>:~$</i> cat skills.txt</p><p className="terminal-muted">JavaScript, Python, C++, Node.js, Arduino, ML, Discord.js...</p><p><b>awais@portfolio</b><i>:~$</i> echo $CURRENT_FOCUS</p><p className="terminal-muted">Building smarter software, one commit at a time.</p><p><b>awais@portfolio</b><i>:~$</i> <span className="cursor">█</span></p></div>
         </div>
         <h2 className="what-title">What I'm doing</h2>
         <div className="service-grid">{[
